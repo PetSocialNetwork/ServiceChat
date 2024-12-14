@@ -44,6 +44,11 @@ namespace ServiceChat.Domain.Services
             await _messageRepository.Delete(existedMessage, cancellationToken);
         }
 
+        public async Task DeleteAllMessagesByChatIDAsync(Guid chatId, CancellationToken cancellationToken)
+        {
+            await _messageRepository.DeleteAllMessagesByChatIdAsync(chatId, cancellationToken);
+        }
+
         public async Task UpdateMessageAsync(Guid messageId, string messageText, CancellationToken cancellationToken)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(messageText);

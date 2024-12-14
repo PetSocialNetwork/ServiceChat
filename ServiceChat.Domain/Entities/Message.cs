@@ -11,6 +11,7 @@ namespace ServiceChat.Domain.Entities
         public string? UserName { get; set; } 
         public string MessageText { get; set; }
         public DateTime DateRecord { get; set; }
+        public virtual Chat Chat { get; set; }
         protected Message() { }
     }
 }

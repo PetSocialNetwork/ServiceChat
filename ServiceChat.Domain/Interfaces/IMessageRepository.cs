@@ -6,5 +6,6 @@ namespace ServiceChat.Domain.Interfaces
     {
         Task<Message?> FindMessageAsync(Guid id, CancellationToken cancellationToken);
         IAsyncEnumerable<Message> BySearch(Guid chatId, CancellationToken cancellationToken);
+        Task DeleteAllMessagesByChatIdAsync(Guid chatId, CancellationToken cancellationToken);
     }
 }

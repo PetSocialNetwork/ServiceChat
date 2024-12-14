@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServiceChat.Domain.Entities;
 using ServiceChat.Domain.Interfaces;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace ServiceChat.DataEntityFramework.Repositories
@@ -19,6 +20,15 @@ namespace ServiceChat.DataEntityFramework.Repositories
             var query = Entities.Where(c => c.ChatId == chatId).AsQueryable();
             await foreach (var message in query.AsAsyncEnumerable().WithCancellation(cancellationToken))
                 yield return message;
+        }
+
+        public async Task DeleteAllMessagesByChatIdAsync(Guid chatId, CancellationToken cancellationToken)
+        {
+            var messagesToDelete = await Entities.Where(it => it.ChatId == chatId)
+                                       .ToListAsync(cancellationToken);
+
+            Entities.RemoveRange(messagesToDelete);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

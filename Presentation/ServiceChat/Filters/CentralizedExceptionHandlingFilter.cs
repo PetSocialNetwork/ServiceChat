@@ -24,7 +24,8 @@ namespace ServiceChat.WebApi.Filters
         {
             return context.Exception switch
             {
-               MessageNotFoundException => ("Сообщение не существует.", StatusCodes.Status400BadRequest),
+                ChatNotFoundException => ("Чат не существует.", StatusCodes.Status400BadRequest),
+                MessageNotFoundException => ("Сообщение не существует.", StatusCodes.Status400BadRequest),
                 Exception => ("Неизвестная ошибка.", StatusCodes.Status500InternalServerError),
                 _ => (null, 0)
             };

@@ -5,7 +5,7 @@ namespace ServiceChat.DataEntityFramework.Repositories
 {
     public class EFRepository<TEntity> : IRepositoryEF<TEntity> where TEntity : class, IEntity
     {
-        private readonly DbContext _dbContext;
+        protected readonly DbContext _dbContext;
         protected DbSet<TEntity> Entities => _dbContext.Set<TEntity>();
         public EFRepository(DbContext appDbContext)
         {

@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace ServiceChat.WebApi.Controllers
 {
-    [Route("message")]
+    [Route("api/[controller]")]
     [ApiController]
     public class MessageController : ControllerBase
     {
@@ -23,7 +23,7 @@ namespace ServiceChat.WebApi.Controllers
         //[ProducesResponseType(StatusCodes.Status200OK)]
         //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
         //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpDelete]
+        [HttpDelete("[action]")]
         public async Task DeleteMessageAsync([FromQuery] Guid id, CancellationToken cancellationToken)
         {
             await _messageService.DeleteMessageAsync(id, cancellationToken);
@@ -31,7 +31,7 @@ namespace ServiceChat.WebApi.Controllers
 
         //[ProducesResponseType(StatusCodes.Status200OK)]
         //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet("chat")]
+        [HttpGet("[action]")]
         public async IAsyncEnumerable<MessageResponse> BySearchAsync([FromQuery] Guid chatId, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             await foreach (var message in _messageService.BySearchAsync(chatId, cancellationToken))
@@ -44,7 +44,7 @@ namespace ServiceChat.WebApi.Controllers
         //[ProducesResponseType(StatusCodes.Status200OK)]
         //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
         //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<MessageResponse> GetMessageByIdAsync([FromQuery] Guid id, CancellationToken cancellationToken)
         {
             var message = await _messageService.GetMessageByIdAsync(id, cancellationToken);
@@ -53,7 +53,7 @@ namespace ServiceChat.WebApi.Controllers
 
         //[ProducesResponseType(StatusCodes.Status200OK)]
         //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<MessageResponse> AddMessageAsync([FromBody] AddMessageRequest request, CancellationToken cancellationToken)
         {         
             var message = _mapper.Map<Message>(request);
@@ -65,7 +65,7 @@ namespace ServiceChat.WebApi.Controllers
         //[ProducesResponseType(StatusCodes.Status200OK)]
         //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
         //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPut]
+        [HttpPut("[action]")]
         public async Task UpdatetUserProfileAsync([FromBody] UpdateMessageRequest request, CancellationToken cancellationToken)
         {
             await _messageService.UpdateMessageAsync(request.Id, request.MessageText, cancellationToken);

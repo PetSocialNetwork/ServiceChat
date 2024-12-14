@@ -12,11 +12,11 @@ namespace ServiceChat.WebApi.Mappings
             CreateMap<Message, MessageResponse>();
 
             CreateMap<AddMessageRequest, Message>()
-           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
-           .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => src.ChatId))
-           .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-           .ForMember(dest => dest.MessageText, opt => opt.MapFrom(src => src.MessageText))
-           .ForMember(dest => dest.DateRecord, opt => opt.MapFrom(src => DateTime.Now));
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => src.ChatId))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.MessageText, opt => opt.MapFrom(src => src.MessageText))
+                .ForMember(dest => dest.DateRecord, opt => opt.MapFrom(src => DateTime.Now));
         }
     }
 }
