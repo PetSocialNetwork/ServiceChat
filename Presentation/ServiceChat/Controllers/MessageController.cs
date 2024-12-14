@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PetSocialNetwork.ServiceUser;
 using ServiceChat.Domain.Entities;
 using ServiceChat.Domain.Services;
 using ServiceChat.WebApi.Models.Requests;
@@ -13,10 +14,14 @@ namespace ServiceChat.WebApi.Controllers
     public class MessageController : ControllerBase
     {
         private readonly MessageService _messageService;
+        private readonly IUserProfileClient _userProfileClient;
         private readonly IMapper _mapper;
-        public MessageController(MessageService messageService, IMapper mapper)
+        public MessageController(MessageService messageService,
+            IUserProfileClient userProfileClient,
+            IMapper mapper)
         {
             _messageService = messageService ?? throw new ArgumentNullException(nameof(messageService));
+            _userProfileClient = userProfileClient ?? throw new ArgumentNullException(nameof(userProfileClient));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -57,7 +62,8 @@ namespace ServiceChat.WebApi.Controllers
         public async Task<MessageResponse> AddMessageAsync([FromBody] AddMessageRequest request, CancellationToken cancellationToken)
         {         
             var message = _mapper.Map<Message>(request);
-            message.UserName = ""; //TODO: получить пользователя по UserId с другого сервиса
+            var user = await _userProfileClient.GetUserProfileByIdAsync(message.UserId, cancellationToken);
+            message.UserName = $"{user.FirstName} {user.FirstName}";
             await _messageService.AddMessageAsync(message, cancellationToken);
             return _mapper.Map<MessageResponse>(message);
         }

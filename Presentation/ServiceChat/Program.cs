@@ -4,10 +4,12 @@ using ServiceChat.DataEntityFramework.Repositories;
 using ServiceChat.Domain.Interfaces;
 using ServiceChat.Domain.Services;
 using ServiceChat.WebApi;
+using ServiceChat.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddClientServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -21,6 +23,7 @@ builder.Services.AddScoped<MessageService>();
 builder.Services.AddScoped<ChatService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 var app = builder.Build();
 
