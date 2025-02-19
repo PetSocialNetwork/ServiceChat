@@ -1,7 +1,6 @@
 ﻿using ServiceChat.Domain.Entities;
 using ServiceChat.Domain.Exceptions;
 using ServiceChat.Domain.Interfaces;
-using System.Runtime.CompilerServices;
 
 namespace ServiceChat.Domain.Services
 {
@@ -44,10 +43,9 @@ namespace ServiceChat.Domain.Services
             await _chatRepository.Delete(existedChat, cancellationToken);
         }
 
-        public async IAsyncEnumerable<Chat> BySearchAsync(Guid chatId, [EnumeratorCancellation] CancellationToken cancellationToken)
+        public async Task<List<Chat>> BySearchAsync(Guid chatId, CancellationToken cancellationToken)
         {
-            await foreach (var chat in _chatRepository.BySearch(chatId, cancellationToken))
-                yield return chat;
+            return await _chatRepository.BySearch(chatId, cancellationToken);
         }      
     }
 }

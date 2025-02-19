@@ -1,7 +1,12 @@
-﻿namespace ServiceChat.WebApi.Models.Requests
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ServiceChat.WebApi.Models.Requests
 {
     public class AddChatRequest
     {
-        public List<Guid> UserIds { get; set; } = new List<Guid>();
+        [Required]
+        public Guid UserId { get; set; }
+        [Required]
+        public List<Guid> FriendIds { get; set; } = [];
     }
 }

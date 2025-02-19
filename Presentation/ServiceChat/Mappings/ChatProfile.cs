@@ -11,8 +11,9 @@ namespace ServiceChat.WebApi.Mappings
         {
             CreateMap<AddChatRequest, Chat>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
-                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(dest => dest.UserIds, opt => opt.MapFrom(src => src.UserIds))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.FriendIds, opt => opt.MapFrom(src => src.FriendIds))
                 .ForMember(dest => dest.Messages, opt => opt.Ignore());
 
             CreateMap<Chat, AddChatResponse>();

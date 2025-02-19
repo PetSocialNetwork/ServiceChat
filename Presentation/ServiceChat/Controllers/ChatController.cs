@@ -4,7 +4,6 @@ using ServiceChat.Domain.Entities;
 using ServiceChat.Domain.Services;
 using ServiceChat.WebApi.Models.Requests;
 using ServiceChat.WebApi.Models.Responses;
-using System.Runtime.CompilerServices;
 
 namespace ServiceChat.WebApi.Controllers
 {
@@ -46,13 +45,10 @@ namespace ServiceChat.WebApi.Controllers
         //[ProducesResponseType(StatusCodes.Status200OK)]
         //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("[action]")]
-        public async IAsyncEnumerable<ChatResponse> BySearchAsync([FromQuery] Guid userId, [EnumeratorCancellation] CancellationToken cancellationToken)
+        public async Task<List<ChatResponse>> BySearchAsync([FromQuery] Guid userId, CancellationToken cancellationToken)
         {
-            await foreach (var chat in _chatService.BySearchAsync(userId, cancellationToken))
-            {
-                var chatResponse = _mapper.Map<ChatResponse>(chat);
-                yield return chatResponse;
-            }
+            var chats = await _chatService.BySearchAsync(userId, cancellationToken);
+            return _mapper.Map<List<ChatResponse>>(chats);
         }
 
         //[ProducesResponseType(StatusCodes.Status200OK)]
