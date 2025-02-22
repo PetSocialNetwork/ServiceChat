@@ -21,10 +21,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
-	<ItemGroup>
-		<OpenApiReference Include="ApiDefs\UserService.json" Options="/OperationGenerationMode:MultipleClientsFromFirstTagAndPathSegments /GenerateClientInterfaces:true /GenerateExceptionClasses:false /ClientBaseClass:ApiClientBase /ExcludedTypeNames:BySearchQueryOptions,SearchByRule,FiltrationRuleSimple,OrderingRule,PaginationRule,ServiceErrorMessage,FileParameter /DateTimeType:System.DateTime /TimeType:System.TimeOnly /DateType:System.DateOnly" CodeGenerator="NSwagCSharp" Namespace="PetSocialNetwork.ServiceUser" ClassName="{controller}Client" />
-	</ItemGroup>
-	
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\ServiceChat.DataEntityFramework\ServiceChat.DataEntityFramework.csproj" />
     <ProjectReference Include="..\..\ServiceChat.Domain\ServiceChat.Domain.csproj" />

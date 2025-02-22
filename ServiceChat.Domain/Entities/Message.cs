@@ -8,10 +8,9 @@ namespace ServiceChat.Domain.Entities
         public Guid Id { get; init; }
         public Guid ChatId { get; init; }
         public Guid UserId { get; set; }
-        public string? UserName { get; set; } 
         public string MessageText { get; set; }
         public DateTime DateRecord { get; set; }
-        public virtual Chat Chat { get; set; }
+        public Chat Chat { get; set; }
         protected Message() { }
     }
 }

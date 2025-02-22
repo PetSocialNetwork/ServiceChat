@@ -5,7 +5,6 @@ using ServiceChat.DataEntityFramework.Repositories;
 using ServiceChat.Domain.Interfaces;
 using ServiceChat.Domain.Services;
 using ServiceChat.WebApi;
-using ServiceChat.WebApi.Extensions;
 using ServiceChat.WebApi.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +13,8 @@ builder.Services.AddControllers(options =>
 {
     options.Filters.Add<CentralizedExceptionHandlingFilter>();
 });
-builder.Services.AddClientServices();
+
+builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {

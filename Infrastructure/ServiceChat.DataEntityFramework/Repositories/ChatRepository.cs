@@ -17,5 +17,16 @@ namespace ServiceChat.DataEntityFramework.Repositories
         {
             return await Entities.Where(c => c.UserId == userId).ToListAsync(cancellationToken);         
         }
+
+        public async Task<Chat?> GetChatByUsersAsync(Guid userId, Guid friendId, CancellationToken cancellationToken)
+        {
+            var chat = await Entities
+                .FirstOrDefaultAsync(
+                    c => c.UserId == userId && c.FriendIds.Contains(friendId) ||
+                         c.UserId == friendId && c.FriendIds.Contains(userId),
+                    cancellationToken);
+
+            return chat;
+        }
     }
 }

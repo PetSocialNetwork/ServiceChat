@@ -6,5 +6,6 @@ namespace ServiceChat.Domain.Interfaces
     {
         Task<Chat?> FindChatAsync(Guid id, CancellationToken cancellationToken);
         Task<List<Chat>> BySearch(Guid userId, CancellationToken cancellationToken);
+        Task<Chat?> GetChatByUsersAsync(Guid userId, Guid friendId, CancellationToken cancellationToken);
     }
 }

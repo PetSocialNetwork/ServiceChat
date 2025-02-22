@@ -27,6 +27,15 @@ namespace ServiceChat.Domain.Services
 
         public async Task<Chat> AddChatAsync(Chat chat, CancellationToken cancellationToken)
         {
+            //Временно
+            var userId = chat.UserId;
+            var friendId = chat.FriendIds.First();
+
+            if (await ChatExistsAsync(userId, friendId, cancellationToken))
+            {
+                throw new ChatAlreadyExistsException("Чат с данным пользователем уже существует.");
+            }
+
             ArgumentNullException.ThrowIfNull(chat);
             await _chatRepository.Add(chat, cancellationToken);
             return chat;
@@ -46,6 +55,13 @@ namespace ServiceChat.Domain.Services
         public async Task<List<Chat>> BySearchAsync(Guid chatId, CancellationToken cancellationToken)
         {
             return await _chatRepository.BySearch(chatId, cancellationToken);
-        }      
+        }
+
+        private async Task<bool> ChatExistsAsync(Guid userId, Guid friendId, CancellationToken cancellationToken)
+        {
+            var existingChat = await _chatRepository.GetChatByUsersAsync(userId, friendId, cancellationToken);
+
+            return existingChat != null;
+        }
     }
 }
