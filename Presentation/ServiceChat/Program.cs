@@ -14,6 +14,8 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<CentralizedExceptionHandlingFilter>();
 });
 
+//Временно
+builder.Services.AddCors();
 builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -37,6 +39,16 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 var app = builder.Build();
+
+//Временно
+app.UseCors(policy =>
+{
+    policy
+        .WithOrigins("http://localhost:3000")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials(); 
+});
 
 if (app.Environment.IsDevelopment())
 {

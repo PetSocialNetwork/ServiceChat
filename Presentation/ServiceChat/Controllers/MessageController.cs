@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using ServiceChat.Domain.Entities;
 using ServiceChat.Domain.Services;
 using ServiceChat.WebApi.Models.Requests;
 using ServiceChat.WebApi.Models.Responses;
@@ -49,16 +48,6 @@ namespace ServiceChat.WebApi.Controllers
         public async Task<MessageResponse> GetMessageByIdAsync([FromQuery] Guid id, CancellationToken cancellationToken)
         {
             var message = await _messageService.GetMessageByIdAsync(id, cancellationToken);
-            return _mapper.Map<MessageResponse>(message);
-        }
-
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost("[action]")]
-        public async Task<MessageResponse> AddMessageAsync([FromBody] AddMessageRequest request, CancellationToken cancellationToken)
-        {         
-            var message = _mapper.Map<Message>(request);
-            await _messageService.AddMessageAsync(message, cancellationToken);
             return _mapper.Map<MessageResponse>(message);
         }
 

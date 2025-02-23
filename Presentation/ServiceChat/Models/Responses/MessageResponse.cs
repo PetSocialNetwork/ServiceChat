@@ -12,6 +12,8 @@ namespace ServiceChat.WebApi.Models.Responses
         [Required]
         public Guid UserId { get; set; }
         [Required]
+        public string UserName { get; set; }
+        [Required]
         public string MessageText { get; set; }
         [Required]
         public DateTime DateRecord { get; set; }
