@@ -68,5 +68,10 @@ namespace ServiceChat.Domain.Services
             await foreach (var comment in _messageRepository.BySearch(chatId, cancellationToken))
                 yield return comment;
         }
+
+        public async Task<Message?> GetLastMessageByChatIdAsync(Guid chatId, CancellationToken cancellationToken)
+        {
+            return await _messageRepository.GetLastMessageByChatIdAsync(chatId, cancellationToken);
+        }
     }
 }

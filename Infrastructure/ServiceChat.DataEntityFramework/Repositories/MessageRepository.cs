@@ -15,6 +15,14 @@ namespace ServiceChat.DataEntityFramework.Repositories
             return await Entities.SingleOrDefaultAsync(it => it.Id == id, cancellationToken);
         }
 
+        public async Task<Message?> GetLastMessageByChatIdAsync(Guid chatId, CancellationToken cancellationToken)
+        {
+            return await Entities
+                .Where(it => it.ChatId == chatId)
+                .OrderByDescending(it => it.DateRecord) 
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
         public async IAsyncEnumerable<Message> BySearch(Guid chatId, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var query = Entities.Where(c => c.ChatId == chatId).AsQueryable();

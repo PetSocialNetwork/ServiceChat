@@ -59,5 +59,19 @@ namespace ServiceChat.WebApi.Controllers
         {
             await _messageService.UpdateMessageAsync(request.Id, request.MessageText, cancellationToken);
         }
+
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet("[action]")]
+        public async Task<LastMessageResponse?> GetLastMessageByChatIdAsync([FromQuery] Guid chatId, CancellationToken cancellationToken)
+        {
+            var message = await _messageService.GetLastMessageByChatIdAsync(chatId, cancellationToken);
+            if (message != null)
+            {
+                return _mapper.Map<LastMessageResponse>(message);
+            }
+            return new LastMessageResponse();
+        }
     }
 }

@@ -60,6 +60,17 @@ namespace ServiceChat.WebApi.Controllers
             //сделать с Include Messages
             var chat = await _chatService.GetChatByIdAsync(id,cancellationToken);
             return _mapper.Map<AddChatResponse>(chat);
-        }      
+        }
+
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPost("[action]")]
+        public async Task<AddChatResponse> GetOrCreateChatAsync([FromBody] AddChatRequest request, CancellationToken cancellationToken)
+        {
+            var chat = _mapper.Map<Chat>(request);
+            var addedChat = await _chatService.GetOrCreateChatAsync(chat, cancellationToken);
+            return _mapper.Map<AddChatResponse>(addedChat);
+        }
     }
 }

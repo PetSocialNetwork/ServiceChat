@@ -9,6 +9,7 @@ namespace ServiceChat.WebApi.Mappings
         public MessageProfile()
         {
             CreateMap<Message, MessageResponse>();
+            CreateMap<Message, LastMessageResponse>();
         }
     }
 }

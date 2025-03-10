@@ -5,7 +5,6 @@ namespace ServiceChat.Domain.Entities
     public class Chat : IEntity
     {
         public Guid Id { get; init; }
-        public Guid UserId { get; init; }
         public DateTime CreatedAt { get; set; }
         public List<Guid> FriendIds { get; set; } = [];
         public virtual List<Message>? Messages { get; set; } = [];

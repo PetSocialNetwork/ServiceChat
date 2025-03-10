@@ -9,8 +9,6 @@ namespace ServiceChat.WebApi.Models.Responses
         [Required]
         public Guid Id { get; init; }
         [Required]
-        public Guid UserId { get; init; }
-        [Required]
         public DateTime CreatedAt { get; set; }
         [Required]
         public List<Guid> FriendIds { get; set; } 
