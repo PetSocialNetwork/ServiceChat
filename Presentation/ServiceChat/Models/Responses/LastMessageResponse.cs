@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ServiceChat.WebApi.Models.Responses
+﻿namespace ServiceChat.WebApi.Models.Responses
 {
     public class LastMessageResponse
     {
