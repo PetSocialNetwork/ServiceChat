@@ -21,9 +21,6 @@ namespace ServiceChat.WebApi.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ChatNotFoundException))]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("[action]")]
         public async Task DeleteChatAsync([FromQuery] Guid id, CancellationToken cancellationToken)
         {
@@ -32,8 +29,6 @@ namespace ServiceChat.WebApi.Controllers
             await _messageService.DeleteAllMessagesByChatIDAsync(id, cancellationToken);
         }
 
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("[action]")]
         public async Task<AddChatResponse> AddChatAsync([FromBody] AddChatRequest request, CancellationToken cancellationToken)
         {
@@ -42,8 +37,6 @@ namespace ServiceChat.WebApi.Controllers
             return _mapper.Map<AddChatResponse>(addedChat);
         }
 
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("[action]")]
         public async Task<List<ChatResponse>> BySearchAsync([FromQuery] Guid userId, CancellationToken cancellationToken)
         {
@@ -51,20 +44,13 @@ namespace ServiceChat.WebApi.Controllers
             return _mapper.Map<List<ChatResponse>>(chats);
         }
 
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("[action]")]
         public async Task<AddChatResponse> GetChatByIdAsync([FromQuery] Guid id, CancellationToken cancellationToken)
         {
-            //сделать с Include Messages
             var chat = await _chatService.GetChatByIdAsync(id,cancellationToken);
             return _mapper.Map<AddChatResponse>(chat);
         }
 
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("[action]")]
         public async Task<AddChatResponse> GetOrCreateChatAsync([FromBody] AddChatRequest request, CancellationToken cancellationToken)
         {
