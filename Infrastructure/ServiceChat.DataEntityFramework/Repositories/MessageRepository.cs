@@ -27,8 +27,8 @@ namespace ServiceChat.DataEntityFramework.Repositories
         {
             return await Entities
                 .Where(c => c.ChatId == chatId)
-                .Take(take)
                 .Skip(offset * take)
+                .Take(take)
                 .ToListAsync(cancellationToken);
         }
 

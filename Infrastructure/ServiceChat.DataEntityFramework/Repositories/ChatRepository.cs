@@ -17,8 +17,8 @@ namespace ServiceChat.DataEntityFramework.Repositories
         {
             return await Entities
                     .Where(c => c.FriendIds != null && c.FriendIds.Contains(userId))
-                    .Take(take)
                     .Skip(offset * take)
+                    .Take(take)
                     .ToListAsync(cancellationToken);
         }
 
