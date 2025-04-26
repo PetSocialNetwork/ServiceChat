@@ -13,10 +13,12 @@ namespace ServiceChat.DataEntityFramework.Repositories
             return await Entities.SingleOrDefaultAsync(it => it.Id == id, cancellationToken);
         }
 
-        public async Task<List<Chat>> BySearch(Guid userId, CancellationToken cancellationToken)
+        public async Task<List<Chat>> BySearch(Guid userId, int take, int offset, CancellationToken cancellationToken)
         {
             return await Entities
                     .Where(c => c.FriendIds != null && c.FriendIds.Contains(userId))
+                    .Take(take)
+                    .Skip(offset * take)
                     .ToListAsync(cancellationToken);
         }
 

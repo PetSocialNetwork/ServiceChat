@@ -63,10 +63,13 @@ namespace ServiceChat.Domain.Services
             await _messageRepository.Update(existedMessage, cancellationToken);
         }
 
-        public async IAsyncEnumerable<Message> BySearchAsync(Guid chatId, [EnumeratorCancellation] CancellationToken cancellationToken)
+        public async Task<List<Message>> BySearchAsync(Guid chatId, int take, int offset, CancellationToken cancellationToken)
         {
-            await foreach (var comment in _messageRepository.BySearch(chatId, cancellationToken))
-                yield return comment;
+            if (take < 0 || offset < 0)
+            {
+                throw new ArgumentException("Параметр не может быть меньше 0");
+            }
+            return await _messageRepository.BySearch(chatId, take, offset, cancellationToken);
         }
 
         public async Task<Message?> GetLastMessageByChatIdAsync(Guid chatId, CancellationToken cancellationToken)

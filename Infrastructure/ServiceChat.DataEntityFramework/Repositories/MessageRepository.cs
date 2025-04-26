@@ -23,11 +23,13 @@ namespace ServiceChat.DataEntityFramework.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async IAsyncEnumerable<Message> BySearch(Guid chatId, [EnumeratorCancellation] CancellationToken cancellationToken)
+        public async Task<List<Message>> BySearch(Guid chatId, int take, int offset, CancellationToken cancellationToken)
         {
-            var query = Entities.Where(c => c.ChatId == chatId).AsQueryable();
-            await foreach (var message in query.AsAsyncEnumerable().WithCancellation(cancellationToken))
-                yield return message;
+            return await Entities
+                .Where(c => c.ChatId == chatId)
+                .Take(take)
+                .Skip(offset * take)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task DeleteAllMessagesByChatIdAsync(Guid chatId, CancellationToken cancellationToken)

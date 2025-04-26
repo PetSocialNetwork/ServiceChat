@@ -20,30 +20,19 @@ namespace ServiceChat.WebApi.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("[action]")]
         public async Task DeleteMessageAsync([FromQuery] Guid id, CancellationToken cancellationToken)
         {
             await _messageService.DeleteMessageAsync(id, cancellationToken);
         }
 
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet("[action]")]
-        public async IAsyncEnumerable<MessageResponse> BySearchAsync([FromQuery] Guid chatId, [EnumeratorCancellation] CancellationToken cancellationToken)
+        [HttpPost("[action]")]
+        public async Task<List<MessageResponse>> BySearchAsync([FromBody] MessageRequest request, CancellationToken cancellationToken)
         {
-            await foreach (var message in _messageService.BySearchAsync(chatId, cancellationToken))
-            {
-                var messageResponse = _mapper.Map<MessageResponse>(message);
-                yield return messageResponse;
-            }
+            var messages = await _messageService.BySearchAsync(request.ChatId, request.Take, request.Offset, cancellationToken);
+            return _mapper.Map<List<MessageResponse>>(messages);
         }
       
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("[action]")]
         public async Task<MessageResponse> GetMessageByIdAsync([FromQuery] Guid id, CancellationToken cancellationToken)
         {
@@ -51,18 +40,12 @@ namespace ServiceChat.WebApi.Controllers
             return _mapper.Map<MessageResponse>(message);
         }
 
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("[action]")]
         public async Task UpdateMessageAsync([FromBody] UpdateMessageRequest request, CancellationToken cancellationToken)
         {
             await _messageService.UpdateMessageAsync(request.Id, request.MessageText, cancellationToken);
         }
 
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(MessageFoundException))]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("[action]")]
         public async Task<LastMessageResponse?> GetLastMessageByChatIdAsync([FromQuery] Guid chatId, CancellationToken cancellationToken)
         {

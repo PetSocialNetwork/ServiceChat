@@ -61,9 +61,13 @@ namespace ServiceChat.Domain.Services
             await _chatRepository.Delete(existedChat, cancellationToken);
         }
 
-        public async Task<List<Chat>> BySearchAsync(Guid chatId, CancellationToken cancellationToken)
+        public async Task<List<Chat>> BySearchAsync(Guid chatId, int take, int offset, CancellationToken cancellationToken)
         {
-            return await _chatRepository.BySearch(chatId, cancellationToken);
+            if (take < 0 || offset < 0)
+            {
+                throw new ArgumentException("Параметр не может быть меньше 0");
+            }
+            return await _chatRepository.BySearch(chatId, take, offset, cancellationToken);
         }
 
         private async Task<bool> ChatExistsAsync(List<Guid> friendIds, CancellationToken cancellationToken)

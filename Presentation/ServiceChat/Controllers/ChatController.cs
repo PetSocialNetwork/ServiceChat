@@ -37,10 +37,10 @@ namespace ServiceChat.WebApi.Controllers
             return _mapper.Map<AddChatResponse>(addedChat);
         }
 
-        [HttpGet("[action]")]
-        public async Task<List<ChatResponse>> BySearchAsync([FromQuery] Guid userId, CancellationToken cancellationToken)
+        [HttpPost("[action]")]
+        public async Task<List<ChatResponse>> BySearchAsync([FromBody] ChatRequest request, CancellationToken cancellationToken)
         {
-            var chats = await _chatService.BySearchAsync(userId, cancellationToken);
+            var chats = await _chatService.BySearchAsync(request.UserId, request.Take, request.Offset, cancellationToken);
             return _mapper.Map<List<ChatResponse>>(chats);
         }
 
