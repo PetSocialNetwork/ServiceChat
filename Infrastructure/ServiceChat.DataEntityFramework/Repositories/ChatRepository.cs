@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServiceChat.Domain.Entities;
 using ServiceChat.Domain.Interfaces;
+using ServiceChat.Domain.Shared;
 
 namespace ServiceChat.DataEntityFramework.Repositories
 {
@@ -13,12 +14,12 @@ namespace ServiceChat.DataEntityFramework.Repositories
             return await Entities.SingleOrDefaultAsync(it => it.Id == id, cancellationToken);
         }
 
-        public async Task<List<Chat>> BySearch(Guid userId, int take, int offset, CancellationToken cancellationToken)
+        public async Task<List<Chat>> BySearch(Guid userId, PaginationOptions options, CancellationToken cancellationToken)
         {
             return await Entities
                     .Where(c => c.FriendIds != null && c.FriendIds.Contains(userId))
-                    .Skip(offset * take)
-                    .Take(take)
+                    .Skip(options.Offset * options.Take)
+                    .Take(options.Take)
                     .ToListAsync(cancellationToken);
         }
 

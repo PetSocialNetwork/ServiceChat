@@ -1,6 +1,7 @@
 ﻿using ServiceChat.Domain.Entities;
 using ServiceChat.Domain.Exceptions;
 using ServiceChat.Domain.Interfaces;
+using ServiceChat.Domain.Shared;
 
 namespace ServiceChat.Domain.Services
 {
@@ -13,7 +14,8 @@ namespace ServiceChat.Domain.Services
                 ?? throw new ArgumentNullException(nameof(chatRepository));
         }
 
-        public async Task<Chat> GetChatByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<Chat> GetChatByIdAsync
+            (Guid id, CancellationToken cancellationToken)
         {
             try
             {
@@ -25,21 +27,21 @@ namespace ServiceChat.Domain.Services
             }
         }
 
-        public async Task<Chat> AddChatAsync(Chat chat, CancellationToken cancellationToken)
+        public async Task<Chat> AddChatAsync
+            (Chat chat, CancellationToken cancellationToken)
         {
             if (await ChatExistsAsync(chat.FriendIds, cancellationToken))
             {
                 throw new ChatAlreadyExistsException("Чат с данным пользователем уже существует.");
             }
 
-            ArgumentNullException.ThrowIfNull(chat);
             await _chatRepository.Add(chat, cancellationToken);
             return chat;
         }
 
-        public async Task<Chat> GetOrCreateChatAsync(Chat chat, CancellationToken cancellationToken)
+        public async Task<Chat> GetOrCreateChatAsync
+            (Chat chat, CancellationToken cancellationToken)
         {
-            ArgumentNullException.ThrowIfNull(chat);
             var existingChat = await _chatRepository.GetChatByUsersAsync(chat.FriendIds, cancellationToken);
             if (existingChat != null)
             { 
@@ -50,30 +52,24 @@ namespace ServiceChat.Domain.Services
             return chat;
         }
 
-        public async Task DeleteChatAsync(Guid id, CancellationToken cancellationToken)
+        public async Task DeleteChatAsync
+            (Guid id, CancellationToken cancellationToken)
         {
-            var existedChat = await _chatRepository.FindChatAsync(id, cancellationToken);
-            if (existedChat is null)
-            {
-                throw new ChatNotFoundException("Чат не существует.");
-            }
-
+            var existedChat = await _chatRepository.FindChatAsync(id, cancellationToken)
+                ?? throw new ChatNotFoundException("Чат не существует.");
             await _chatRepository.Delete(existedChat, cancellationToken);
         }
 
-        public async Task<List<Chat>> BySearchAsync(Guid chatId, int take, int offset, CancellationToken cancellationToken)
+        public async Task<List<Chat>> BySearchAsync
+            (Guid chatId, PaginationOptions options, CancellationToken cancellationToken)
         {
-            if (take < 0 || offset < 0)
-            {
-                throw new ArgumentException("Параметр не может быть меньше 0");
-            }
-            return await _chatRepository.BySearch(chatId, take, offset, cancellationToken);
+            return await _chatRepository.BySearch(chatId, options, cancellationToken);
         }
 
-        private async Task<bool> ChatExistsAsync(List<Guid> friendIds, CancellationToken cancellationToken)
+        private async Task<bool> ChatExistsAsync
+            (List<Guid> friendIds, CancellationToken cancellationToken)
         {
             var existingChat = await _chatRepository.GetChatByUsersAsync(friendIds, cancellationToken);
-
             return existingChat != null;
         }
     }

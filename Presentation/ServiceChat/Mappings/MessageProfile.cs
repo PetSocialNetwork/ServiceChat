@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using ServiceChat.Domain.Entities;
+using ServiceChat.Domain.Shared;
+using ServiceChat.WebApi.Models.Requests;
 using ServiceChat.WebApi.Models.Responses;
 
 namespace ServiceChat.WebApi.Mappings
@@ -9,7 +11,7 @@ namespace ServiceChat.WebApi.Mappings
         public MessageProfile()
         {
             CreateMap<Message, MessageResponse>();
-            CreateMap<Message, LastMessageResponse>();
+            CreateMap<PaginationRequest, PaginationOptions>();
         }
     }
 }

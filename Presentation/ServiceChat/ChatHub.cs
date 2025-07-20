@@ -15,21 +15,20 @@ namespace ServiceChat.WebApi
             IMapper mapper,
             ILogger<ChatHub> logger)
         {
-            _messageService = messageService ?? throw new ArgumentNullException(nameof(messageService));
-            _logger = logger;
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _messageService = messageService 
+                ?? throw new ArgumentNullException(nameof(messageService));
+            _logger = logger 
+                ?? throw new ArgumentNullException(nameof(logger)); ;
+            _mapper = mapper 
+                ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public async Task SendMessage
             (string messageText,
-            string userName,
             string userId,
             string chatId)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(messageText, nameof(messageText));
-            ArgumentException.ThrowIfNullOrWhiteSpace(userName, nameof(userName));
-
-            var newMessage = new Message(Guid.NewGuid(), Guid.Parse(chatId), Guid.Parse(userId), messageText, userName)
+            var newMessage = new Message(Guid.NewGuid(), Guid.Parse(chatId), Guid.Parse(userId), messageText)
             {
                 DateRecord = DateTime.UtcNow
             };

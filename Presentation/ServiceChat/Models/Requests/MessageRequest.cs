@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿#pragma warning disable CS8618
 namespace ServiceChat.WebApi.Models.Requests
 {
-    public class MessageRequest : BySearchRequest
+    public class MessageRequest 
     {
-        [Required]
         public Guid ChatId { get; set; }
+        public PaginationRequest Options { get; set; }
     }
 }

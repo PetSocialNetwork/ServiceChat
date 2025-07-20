@@ -2,7 +2,7 @@
 
 namespace ServiceChat.WebApi.Models.Requests
 {
-    public class BySearchRequest
+    public class PaginationRequest
     {
         [Required]
         [Range(0, int.MaxValue)]

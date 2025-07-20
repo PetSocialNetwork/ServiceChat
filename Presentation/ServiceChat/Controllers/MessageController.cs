@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ServiceChat.Domain.Services;
+using ServiceChat.Domain.Shared;
 using ServiceChat.WebApi.Models.Requests;
 using ServiceChat.WebApi.Models.Responses;
-using System.Runtime.CompilerServices;
 
 namespace ServiceChat.WebApi.Controllers
 {
@@ -16,45 +16,89 @@ namespace ServiceChat.WebApi.Controllers
         public MessageController(MessageService messageService,       
             IMapper mapper)
         {
-            _messageService = messageService ?? throw new ArgumentNullException(nameof(messageService));         
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _messageService = messageService 
+                ?? throw new ArgumentNullException(nameof(messageService));         
+            _mapper = mapper 
+                ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Удаляет сообщение по идентификатору
+        /// </summary>
+        /// <param name="id">Идентификатор сообщения</param>
+        /// <param name="cancellationToken">Токен отмены</param>
         [HttpDelete("[action]")]
-        public async Task DeleteMessageAsync([FromQuery] Guid id, CancellationToken cancellationToken)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task DeleteMessageAsync
+            ([FromQuery] Guid id, CancellationToken cancellationToken)
         {
             await _messageService.DeleteMessageAsync(id, cancellationToken);
         }
 
+        /// <summary>
+        /// Возвращает все сообщения из чата
+        /// </summary>
+        /// <param name="request">Модель запроса</param>
+        /// <param name="cancellationToken">Токен отмены</param>
         [HttpPost("[action]")]
-        public async Task<List<MessageResponse>> BySearchAsync([FromBody] MessageRequest request, CancellationToken cancellationToken)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<List<MessageResponse>> BySearchAsync
+            ([FromBody] MessageRequest request, CancellationToken cancellationToken)
         {
-            var messages = await _messageService.BySearchAsync(request.ChatId, request.Take, request.Offset, cancellationToken);
+            var options = _mapper.Map<PaginationOptions>(request.Options);
+            var messages = await _messageService.BySearchAsync(request.ChatId, options, cancellationToken);
             return _mapper.Map<List<MessageResponse>>(messages);
         }
       
+        /// <summary>
+        /// Возвращает сообщение по идентификатору
+        /// </summary>
+        /// <param name="id">Идентификатор сообщения</param>
+        /// <param name="cancellationToken"></param>
         [HttpGet("[action]")]
-        public async Task<MessageResponse> GetMessageByIdAsync([FromQuery] Guid id, CancellationToken cancellationToken)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<MessageResponse> GetMessageByIdAsync
+            ([FromQuery] Guid id, CancellationToken cancellationToken)
         {
             var message = await _messageService.GetMessageByIdAsync(id, cancellationToken);
             return _mapper.Map<MessageResponse>(message);
         }
 
+        /// <summary>
+        /// Обновляет сообщение по идентификатору
+        /// </summary>
+        /// <param name="request">Модель запроса</param>
+        /// <param name="cancellationToken">Токен отмены</param>
         [HttpPut("[action]")]
-        public async Task UpdateMessageAsync([FromBody] UpdateMessageRequest request, CancellationToken cancellationToken)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task UpdateMessageAsync
+            ([FromBody] UpdateMessageRequest request, CancellationToken cancellationToken)
         {
             await _messageService.UpdateMessageAsync(request.Id, request.MessageText, cancellationToken);
         }
 
+        /// <summary>
+        /// Возвращает последнее сообщение в чате
+        /// </summary>
+        /// <param name="chatId">Идентификатор чата</param>
+        /// <param name="cancellationToken">Токен отмены</param>
         [HttpGet("[action]")]
-        public async Task<LastMessageResponse?> GetLastMessageByChatIdAsync([FromQuery] Guid chatId, CancellationToken cancellationToken)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<MessageResponse?> GetLastMessageByChatIdAsync
+            ([FromQuery] Guid chatId, CancellationToken cancellationToken)
         {
             var message = await _messageService.GetLastMessageByChatIdAsync(chatId, cancellationToken);
-            if (message != null)
-            {
-                return _mapper.Map<LastMessageResponse>(message);
-            }
-            return new LastMessageResponse();
+            return message != null
+                ? _mapper.Map<MessageResponse>(message)
+                : new MessageResponse();
         }
     }
 }

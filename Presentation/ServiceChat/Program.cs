@@ -1,65 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using ServiceChat.DataEntityFramework;
-using ServiceChat.DataEntityFramework.Repositories;
-using ServiceChat.Domain.Interfaces;
-using ServiceChat.Domain.Services;
-using ServiceChat.WebApi;
-using ServiceChat.WebApi.Filters;
+using ServiceChat.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<CentralizedExceptionHandlingFilter>();
-});
-
-//Временно
-builder.Services.AddCors();
-builder.Services.AddSignalR();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "ChatService", Version = "v1" });
-    //options.UseAllOfToExtendReferenceSchemas();
-    //string pathToXmlDocs = Path.Combine(AppContext.BaseDirectory, AppDomain.CurrentDomain.FriendlyName + ".xml");
-    //options.IncludeXmlComments(pathToXmlDocs, true);
-});
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-             options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
-
-builder.Services.AddScoped(typeof(IRepositoryEF<>), typeof(EFRepository<>));
-builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-builder.Services.AddScoped<IChatRepository, ChatRepository>();
-builder.Services.AddScoped<MessageService>();
-builder.Services.AddScoped<ChatService>();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-builder.Services.AddHttpClient();
-builder.Services.AddSignalR();
+builder.Services.ConfigureServices(builder.Configuration);
 var app = builder.Build();
-
-//Временно
-app.UseCors(policy =>
-{
-    policy
-        .WithOrigins("http://localhost:3000")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials(); 
-});
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-app.MapHub<ChatHub>("/chatHub");
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
+app.ConfigureMiddleware();
 
 app.Run();
