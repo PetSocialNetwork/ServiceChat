@@ -11,6 +11,7 @@ namespace ServiceChat.WebApi.Mappings
         public MessageProfile()
         {
             CreateMap<Message, MessageResponse>();
+            CreateMap<Message, MessageDetailsResponse>();
             CreateMap<PaginationRequest, PaginationOptions>();
         }
     }

@@ -1,8 +1,6 @@
-﻿#pragma warning disable CS8618  
-
-namespace ServiceChat.WebApi.Models.Responses
+﻿namespace ServiceChat.WebApi.Models.Responses
 {
-    public class MessageResponse
+    public class MessageDetailsResponse
     {
         public Guid Id { get; init; }
         public Guid ChatId { get; init; }

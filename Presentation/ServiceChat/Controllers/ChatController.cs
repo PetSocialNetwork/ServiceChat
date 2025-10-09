@@ -72,7 +72,7 @@ namespace ServiceChat.WebApi.Controllers
             ([FromBody] ChatRequest request, CancellationToken cancellationToken)
         {
             var options = _mapper.Map<PaginationOptions>(request.Options);
-            var chats = await _chatService.BySearchAsync(request.UserId, options, cancellationToken);
+            var chats = await _chatService.BySearchAsync((Guid)request.UserId, options, cancellationToken);
             return _mapper.Map<List<ChatResponse>>(chats);
         }
 

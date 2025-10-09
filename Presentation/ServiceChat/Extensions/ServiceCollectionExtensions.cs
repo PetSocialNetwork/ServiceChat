@@ -6,6 +6,7 @@ using ServiceChat.Domain.Interfaces;
 using ServiceChat.WebApi.Filters;
 using ServiceChat.Domain.Services;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace ServiceChat.WebApi.Extensions
 {
@@ -25,6 +26,8 @@ namespace ServiceChat.WebApi.Extensions
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("AllowAll");
             app.UseWebSockets();
             app.UseRouting();
             app.UseHttpsRedirection();
@@ -42,6 +45,19 @@ namespace ServiceChat.WebApi.Extensions
             services.AddControllers(options =>
             {
                 options.Filters.Add<CentralizedExceptionHandlingFilter>();
+            });
+
+            services.AddFluentValidationAutoValidation();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .SetIsOriginAllowed(_ => true)
+                          .AllowCredentials();
+                });
             });
 
             services.AddSignalR();

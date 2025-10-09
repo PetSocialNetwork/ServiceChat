@@ -25,6 +25,7 @@ namespace ServiceChat.WebApi
 
         public async Task SendMessage
             (string messageText,
+            string userName,
             string userId,
             string chatId)
         {
@@ -36,7 +37,8 @@ namespace ServiceChat.WebApi
             try
             {
                 var message = await _messageService.AddMessageAsync(newMessage, default);
-                var messageResponse = _mapper.Map<MessageResponse>(message);
+                var messageResponse = _mapper.Map<MessageDetailsResponse>(message);
+                messageResponse.UserName = userName;
                 await Clients.All.SendAsync("ReceiveMessage", messageResponse);
                 //await Clients.Group(chatId.ToString()).SendAsync("ReceiveMessage", userId, message, cancellationToken: cancellationToken);              
             }
