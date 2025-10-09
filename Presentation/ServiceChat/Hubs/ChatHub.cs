@@ -4,7 +4,7 @@ using ServiceChat.Domain.Entities;
 using ServiceChat.Domain.Services;
 using ServiceChat.WebApi.Models.Responses;
 
-namespace ServiceChat.WebApi
+namespace ServiceChat.WebApi.Hubs
 {
     public class ChatHub : Hub
     {

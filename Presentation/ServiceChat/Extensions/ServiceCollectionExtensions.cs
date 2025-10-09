@@ -7,6 +7,7 @@ using ServiceChat.WebApi.Filters;
 using ServiceChat.Domain.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using ServiceChat.WebApi.Hubs;
 
 namespace ServiceChat.WebApi.Extensions
 {
